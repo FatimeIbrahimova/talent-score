@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    .hero-section {
+        position: relative;
+        display: flex;
+        &_left {
+              svg{
+                position: relative;
+              }
+            &_titles {
+                position: absolute;
+                top:0;
+                z-index: 55;
+                display: flex;
+                gap:30px;
+                .lines{
+                    display: flex;
+                    gap:5px;
+                    padding-left: 8px;
+                }
+                p {
+                    color: white;
+                }
+               &_left{
+                padding-top: 50px;
+                 &_content {
+                    margin-top: 30px;
+                    p {
+                        width: 250px;
+                        height: 76px;
+                    }
+                }
+               }
+            }
+        }
+        &_logo{
+            position: absolute;
+            top: 450px;
+            left: 230px;
+        }
+    }
+}

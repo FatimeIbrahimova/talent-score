@@ -1,0 +1,151 @@
+.form-container{
+// display: flex;
+    .form{
+        display: flex;
+        margin-top: 100px;
+        
+        &-sections{
+            margin-left: -150px;
+            &_title{
+                background-color: rgba(244, 244, 244, 1);
+                border-radius: 15px ;
+                width: 200px;
+                margin-bottom: 20px;
+                h3{
+                    padding-top:8px;
+                    padding-bottom: 8px;
+                    padding-left: 30px;
+                    font-weight: 400;
+                }
+            }
+            .experience{
+                display: flex;
+                align-items: center;
+                width: 240px;
+                border-radius: 15px ;
+                margin-left: -50px;
+                background-color: rgba(16, 53, 87, 1);
+                margin-bottom: 20px;
+                h3{
+                    color: white;
+                    padding-left: 55px;
+                    padding-top:8px;
+                    padding-bottom: 8px;
+                    font-weight: 400;
+                }
+                span{
+                    color: white;
+                    display: inline-block;
+                    padding-left: 15px;
+                }
+            }
+            .no-experience{
+                background-color: rgba(244, 244, 244, 1);
+                border-radius: 15px ;
+                width: 200px;
+                h3{
+                    background-color: rgba(244, 244, 244, 1);
+                color: black;
+                }
+                span{
+                    display: none;
+                }
+            }
+        }
+        &-contents{
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+            margin-left: -30px;
+            background-color: white;
+            padding-left: 50px;
+    
+           &_title{
+            padding-top: 20px;
+            h2{
+                color:rgba(3, 132, 119, 1);
+                font-weight: 400;
+               }
+           }
+           &_section-count{
+            margin-top: 20px;
+            background-color: rgba(3, 132, 119, 1);
+            width: 450px;
+            margin-right: 50px;
+            border-radius: 8px;
+            span{
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+           }
+           &_questions{
+             margin-top: 20px;
+             h3{
+                font-weight: 400;
+             }
+           }
+           &_answers{
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap:20px;
+            .yes{
+                background-color: #f2f6f6;
+                border-radius: 18px ;
+                border: 1px solid #e5e7eb;
+                width: 150px;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                display: flex;
+                padding-left: 50px;
+                align-items: center;
+                gap:10px;
+            }
+            .no{
+                background-color: #f2f6f6;
+                border-radius: 18px ;
+                border: 1px solid #e5e7eb;
+                width: 150px;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                display: flex;
+                padding-left: 50px;
+                align-items: center;
+                gap:10px;
+            }
+            .checkbox{
+                width: 15px;
+                height: 15px;
+                border: 3px solid #e5e7eb;
+                border-radius:15px;
+                margin-left: 30px;
+            }
+            .active{
+                background-color: #038477;
+            }
+           }
+        }
+    }
+    .form-buttons{
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+      button{
+        border:1px solid rgba(3, 132, 119, 1);
+        padding: 15px 60px;
+        border-radius: 25px;
+        // border:none;
+      }
+      .back{
+        color:rgba(3, 132, 119, 1) ;
+        .fa-arrow-left{
+          color:rgba(3, 132, 119, 1) ;
+          margin-right: 10px;
+        }
+      }
+      .next{
+        color:white;
+        background-color: rgba(3, 132, 119, 1);
+      }
+    }
+}

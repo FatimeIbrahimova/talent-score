@@ -5,10 +5,13 @@ import { set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import * as yup from "yup";
 
-const Form = () => {
+const Form = ({alert,setAlert,handleOpenAlert}) => {
 	const [noChecked, setNoChecked] = useState(false);
+	const [noValidation, setNoValidation] = useState(false);
 	const [yesChecked, setYesChecked] = useState(false);
+	const [yesValidation, setYesValidation] = useState(false);
 	const [sixth, setSixth] = useState(false);
 	const [fourth, setFourth] = useState(false);
 	const [openOptions, setOpenOptions] = useState(false);
@@ -21,10 +24,12 @@ const Form = () => {
 	const [inputDisabled, setInputDisabled] = useState(false);
 	const [downDegree, setDownDegree] = useState(false);
 	const [firstPart, setFirstPart] = useState(true);
+	const [secondPart, setSecondPart] = useState(false);
 	const [lookList, setLookList] = useState(false);
-	const [alert, setAlert] = useState(false);
+	// const [alert, setAlert] = useState(false);
 	const [body, setBody] = useState(false);
 	const [finish, setFinish] = useState(false);
+	const [program, setProgram] = useState(false);
 	const [labour, setLabour] = useState([
 		{ name: "Fiziki əmək" },
 		{ name: "Sənət" },
@@ -56,53 +61,74 @@ const Form = () => {
 	const [dateEnd, setDateEnd] = useState("");
 	const [id, setId] = useState(null);
 	let [editedItemIndex, setEditedItemIndex] = useState(-1);
+	let [yesValue, setYesValue] = useState("");
+	let [noValue, setNoValue] = useState("");
+	let [error, setError] = useState({});
 	console.log(editedItemIndex);
 
-	const handleNoClick = () => {
+	const handleNoClick = (e) => {
 		setNoChecked(true);
 		setYesChecked(false);
+		
+		setNoValue(e.target.textContent)
+		setNoValidation(false)
+		setYesValidation(false)
+		setErrorss({})
 	};
-	const handleYesClick = () => {
+	
+	const handleYesClick = (e) => {
+		
 		setYesChecked(true);
 		setNoChecked(false);
+		setYesValue(e.target.textContent)
+		setYesValidation(false)
+		setNoValidation(false)
+		setErrorss({})
 	};
+	console.log(yesValue);
+	const [errorss, setErrorss] = useState({});
 	const handleNext = () => {
-		setFinish(true);
-		setLookList(true);
-		if (noChecked) {
-			setSixth(true);
+		if(yesChecked){
+			if(state.company==="" || state.labour===""){
+               console.log("req");
+			   setError({ company: 'company is required'})
+			   return;
+			}
+			console.log('Veriler işlendi');
+			setError({});
+			setSixth(true)
+			setFirstPart(false)
+			setFinish(true)
+			setProgram(true)
+			setLookList(true)
 		}
-		if (fourth) {
-			setFirstPart(true);
-			console.log("4");
-			setFinish(true);
+		else if(noChecked){
+			setSixth(true)
+			setFirstPart(false)
+			setFinish(true)
+			setProgram(true)
+			setLookList(true)
+		}else{
+			setErrorss({ general: 'fdf'})
+			console.log("erraaa");
+			return;
 		}
+		setErrorss({})
+		
+			
+		
 	};
 	const handleBack = () => {
-		setFourth(true);
-		setFinish(true);
+		setProgram(false);
 		setLookList(true);
 		// if (noChecked) {
 		setFirstPart(true);
+		setYesChecked(false)
 		setLookList(true);
 		console.log("5");
 		setSixth(false);
-		if (setSixth) {
-			setFirstPart(true);
-			setLookList(true);
-			console.log("5");
-			setSixth(false);
-		} else if (!setFirstPart) {
-			setFourth(true);
-		}
-		// if(!setFirstPart){
-		// 	setFourth(true)
-		// }
-
-		// if(setFirstPart){
-		// 	setFourth(true)
-		// }
-		// }
+		setFinish(false)
+		setLookList(false)
 	};
 	const handleOpenOptions = () => {
 		setOpenOptions(!openOptions);
@@ -144,7 +170,6 @@ const Form = () => {
 		const spanContent = e.target.textContent;
 		setClickedText(spanContent);
 		setOpenOptions(false);
-		const { name, textContent } = e.target;
 
 		setState({ ...state, labour: e.target.textContent });
 	};
@@ -175,6 +200,7 @@ const Form = () => {
 		clickedText = "";
 		console.log("a");
 		setFirstPart(false);
+		setSecondPart(true)
 	};
 	const saveEditData = () => {
 		if (editedItemIndex !== -1) {
@@ -238,16 +264,18 @@ const Form = () => {
 		setFirstPart(true);
 	};
 	console.log(id);
-	const handleOpenAlert = (id) => {
-		setAlert(true);
-		setBody(true);
-	};
+	// const handleOpenAlert = (id) => {
+	// 	setAlert(true);
+	// 	setBody(true);
+	// };
 	const handleDelete = (id) => {
 		const updatedArr = arr.filter((item) => item.id !== id);
 		setArr(updatedArr);
 		if (arr.length == 1) {
 			setFirstPart(true);
+			setSecondPart(false)
 			setYesChecked(false);
+			setLookList(false)
 		}
 		setAlert(false);
 	};
@@ -257,10 +285,13 @@ const Form = () => {
 	const handleAddJob = () => {
 		setFirstPart(true);
 		setLookList(true);
+		setSecondPart(false)
 	};
 	const handleLookLists = () => {
 		setFirstPart(false);
+		setSecondPart(true)
 	};
+	console.log(yesValue);
 	return (
 		<div className={`${body ? "body-disable" : ""}`}>
 			<div className="form-container">
@@ -283,7 +314,7 @@ const Form = () => {
 							<span className="six">4</span>
 							<h3>Idman</h3>
 						</div>
-						<div className={`experience ${fourth ? "no-experience" : ""}`}>
+						<div className={`experience ${sixth ? "no-experience" : ""}`}>
 							<span>5</span>
 							<h3>İş təcrübəsi</h3>
 						</div>
@@ -313,7 +344,10 @@ const Form = () => {
 											<h3>İş təcrübəniz var?</h3>
 										</div>
 										<div className="form-contents_answers">
-											<div className="yes" onClick={() => handleYesClick()}>
+											<div  className={`yes ${error ? 'has-error' : ''}`}   value={yesChecked} onClick={(e) => handleYesClick(e)} {...register("yes")} style={{
+															border: errorss.general ? '1px solid red' : '',
+															borderRadius:errors.general ? '20px' : ''
+														  }}>
 												<span style={{ color: yesChecked ? "#038477" : "" }}>
 													Bəli
 												</span>
@@ -321,7 +355,13 @@ const Form = () => {
 													className={`checkbox ${yesChecked ? "active" : ""}`}
 												></div>
 											</div>
-											<div className="no" onClick={() => handleNoClick()}>
+											{yesValidation && (
+												<p style={{color:"red"}}>ffd</p>
+											)}
+											<div   className={`no ${error ? 'has-error' : ''}`}  value={noChecked} onClick={(e) => handleNoClick(e)} {...register("no")} style={{
+															border: errorss.general ? '1px solid red' : '',
+															borderRadius:errors.general ? '20px' : ''
+														  }}>
 												<span style={{ color: noChecked ? "#038477" : "" }}>
 													Xeyr
 												</span>
@@ -329,6 +369,9 @@ const Form = () => {
 													className={`checkbox ${noChecked ? "active" : ""}`}
 												></div>
 											</div>
+											{noValidation && (
+												<p style={{color:"red"}}>ffd</p>
+											)}
 										</div>
 									</>
 								)}
@@ -337,6 +380,7 @@ const Form = () => {
 										yesChecked ? "yes-questions" : ""
 									}`}
 								>
+									<form >
 									<h3>Çalışdığınız müəssisənin adını qeyd edin.*</h3>
 									<input
 										type="text"
@@ -346,7 +390,7 @@ const Form = () => {
 										name="company"
 										onChange={(e) => handleChange(e)}
 										style={{
-											borderColor: errors.company ? 'red' : '',
+											borderColor: error.company ? 'red' : '',
 										  }}
 									/>
 									<h3>Vəzifənizi qeyd edin.*</h3>
@@ -358,21 +402,23 @@ const Form = () => {
 										name="position"
 										onChange={(e) => handleChange(e)}
 										style={{
-											borderColor: errors.position ? 'red' : '',
+											borderColor: error.company ? 'red' : '',
 										  }}
 									/>
 									<div className="form-contents-yes_questions_checkboxs">
 										<div onClick={() => handleOpenOptions()}>
 											<label for="labour">Əmək fəaliyyəti forması:</label>
 											<div className="form-contents-yes_questions_checkboxs_left">
-												<div className="choose">
+												<div className="choose" style={{
+															border: error.company ? '1px solid red' : '',
+															borderRadius:error.company ? '20px' : ''
+														  }}>
 													<span
 														className={`span ${clickedText ? "spann" : ""}`}
 														{...register("labour")}
 														value={clickedText}
-														style={{
-															borderColor: errors.labour ? 'red' : '',
-														  }}
+														name="labour"
+														onChange={(e) => handleChange(e)}
 													>
 														{clickedText ? clickedText : "Seçin ..."}
 													</span>
@@ -392,7 +438,10 @@ const Form = () => {
 										<div onClick={() => handleOpenOptionsDegree()}>
 											<label for="degree">Peşəkarlıq dərəcəsi:</label>
 											<div className="form-contents-yes_questions_checkboxs_left">
-												<div className="choose">
+												<div className="choose" style={{
+															border: error.company ? '1px solid red' : '',
+															borderRadius:error.company ? '20px' : ''
+														  }}>
 													<span
 														className={`span ${
 															clickedTextDegree ? "spann" : ""
@@ -401,9 +450,6 @@ const Form = () => {
 														value={clickedTextDegree}
 														name="degree"
 														onChange={(e) => handleChange(e)}
-														style={{
-															borderColor: errors.degree ? 'red' : '',
-														  }}
 													>
 														{clickedTextDegree
 															? clickedTextDegree
@@ -478,7 +524,7 @@ const Form = () => {
 												name="dateStart"
 												onChange={(e) => handleChange(e)}
 												style={{
-													borderColor: errors.dateStart ? 'red' : '',
+													borderColor: error.company ? 'red' : '',
 												  }}
 											/>
 										</div>
@@ -495,7 +541,7 @@ const Form = () => {
 												name="dateEnd"
 												onChange={(e) => handleChange(e)}
 												style={{
-													borderColor: errors.dateEnd ? 'red' : '',
+													borderColor: inputDisabled ? 'gray' : error.company ? "red" : ""
 												  }}
 											/>
 										</div>
@@ -528,10 +574,11 @@ const Form = () => {
 											</button>
 										</div>
 									)}
+									</form>
 								</div>
 							</div>
 						)}
-						{!firstPart && (
+						{secondPart && (
 							<div className="form-contents_secondpart">
 								<div className="form-contents_secondpart-lists">
 									{arr?.map((item, index) => (
@@ -561,7 +608,7 @@ const Form = () => {
 												onClick={() => handleOpenAlert(item.id)}
 											></i>
 											{alert && (
-												<div className="alert">
+												<div className="alert" onClick={(e) => e.stopPropagation()}>
 													<i
 														class="fa-solid fa-circle-xmark"
 														onClick={() => handleNoDelete()}
@@ -591,13 +638,17 @@ const Form = () => {
 								</button>
 							</div>
 						)}
+						{program && (
+						<h3 style={{color:"#038477",marginTop:25,marginLeft:15}}>Proqram bilikləri substage</h3>
+					)}
 					</div>
+					
 				</div>
 				<div className="form-buttons">
 					<button className="back" onClick={() => handleBack()}>
 						<i class="fa-solid fa-arrow-left"></i> Geri
 					</button>
-					<button className="next" onClick={handleSubmit(handleNext)}>
+					<button className="next" type="submit" onClick={()=>handleNext()}>
 						Növbəti{" "}
 						<i
 							class="fa-solid fa-arrow-right"

@@ -184,7 +184,6 @@
                     .choose{
                         display: flex;
                         align-items: center;
-                        // gap:120px;
                     }
                     .fa-sort-down{
                         color: #038477;
@@ -216,7 +215,6 @@
                 background-color: rgba(242, 246, 246, 1);
                 width: 210px;
                 margin-left: 20px;
-                // margin-top: -5px;
                 z-index: 9999;
                 visibility: hidden;
                 z-index: 1;
@@ -401,6 +399,10 @@
         }
         .disable{
             background-color: rgb(185, 183, 183);
+            border: 1px solid rgb(185, 183, 183);
+            border-color:rgb(185, 183, 183);
+            pointer-events: none; /* Kullanıcı etkileşimini devre dışı bırakır */
+            opacity: 0.5;
         }
     }
     .form-buttons{
@@ -432,12 +434,14 @@
 }
 .alert{
     width: 350px;
-    background-color: rgb(229, 226, 226);
+    background-color: white;
     border-radius: 20px;
     height: 170px;
     position: absolute;
     top: 250px;
     left: 550px;
+    position: fixed;
+    z-index: 99999;
    h4{
     font-weight: 400;
     position: absolute;
@@ -474,8 +478,13 @@
         cursor: pointer;
     }
    }
+   .has-error{
+    border:1px solid red;
+   }
 }
-
+.has-error{
+    border:1px solid red;
+   }
 //   .body-disable{
 //     background-color: gray;
 //   }

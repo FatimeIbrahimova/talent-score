@@ -3,9 +3,9 @@ import "./Home.scss";
 import Logo from "./Logo.svg"
 import Form from "../../components/Form/Form";
 
-const Home = () => {
+const Home = ({alert,setAlert,handleOpenAlert}) => {
 	return (
-		<div className="hero-section">
+		<div  className="hero-section" >
 			<div className="hero-section_left">
             <svg width="791" height="653" viewBox="0 0 791 653" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute left-0 top-0"><path d="M113.5 -334L485.238 -154.269L790.5 -69L509.5 82.5L444.144 117.737C302.948 193.862 184.655 306.327 101.5 443.5L37.9999 548.25L-25.5003 653L-269.213 448.5L-301.074 495.813L-81.9998 170.5L113.5 -334Z" fill="url(#paint0_linear_52_1432)"></path><defs><linearGradient id="paint0_linear_52_1432" x1="337.775" y1="-332.635" x2="-448.536" y2="317.447" gradientUnits="userSpaceOnUse"><stop stop-color="#00404C"></stop><stop offset="1" stop-color="#08D0B0"></stop></linearGradient></defs></svg>         
             <div className="hero-section_left_titles">
@@ -103,7 +103,7 @@ const Home = () => {
             <div className="hero-section_logo">
               <img src={Logo} alt="logo"/>  
             </div>
-           <Form/>
+           <Form handleOpenAlert={handleOpenAlert} alert={alert} setAlert={setAlert}/>
 		</div>
 	);
 };

@@ -7,4 +7,6 @@ export const addFormSchema = yup.object().shape({
   degree: yup.string().required("degree is required"),
   dateStart: yup.string().required("dateStart is required"),
   dateEnd: yup.string().required("dateEnd is required"),
+ 
+  no: yup.boolean().oneOf([true], 'Bir seçenek seçin').required(),
 });

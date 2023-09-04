@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Form.scss";
 import { addFormSchema } from "../../schema/FormSchema";
 import { set, useForm } from "react-hook-form";
@@ -183,11 +183,14 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 	};
 
 	const addData = () => {
-		console.log(state);
+		console.log(state.company);
 		const newItem = { ...state, id: uuidv4() };
 
+		// setArr((prevArr)=>{
+		// 	return prevArr.push(newItem)
+		// })
 		setArr([...arr, newItem]);
-
+		console.log(arr);
 		setState({
 			company: "",
 			position: "",
@@ -196,12 +199,50 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 			dateStart: "",
 			dateEnd: "",
 		});
-		clickedTextDegree = "";
-		clickedText = "";
+		setClickedTextDegree(""); // Clear clickedTextDegree
+  setClickedText(""); // Clear clickedText
 		console.log("a");
 		setFirstPart(false);
 		setSecondPart(true)
 	};
+	console.log("company value",state.dateEnd);
+	useEffect(()=>{
+		console.log("render");
+		setState({
+			company: "",
+					position: "",
+					labour: "",
+					degree: "",
+					dateStart: "",
+					dateEnd: "",
+		})
+		setClickedTextDegree(""); // Clear clickedTextDegree
+		  setClickedText(""); // Clear clickedText
+		 
+     
+	   console.log(state.dateEnd);
+		//   if(id){
+		// 	setState(state)
+		// 	setState({
+		// 		company: "",
+		// 				position: "",
+		// 				labour: "",
+		// 				degree: "",
+		// 				dateStart: "",
+		// 				dateEnd: "",
+		// 	})
+		// 	setClickedTextDegree(""); // Clear clickedTextDegree
+		//   setClickedText(""); // Clear clickedText
+		//   }
+		console.log(id);
+		if(firstPart){
+			// if(state.dateEnd){
+				setInputDisabled(false)
+			// }
+			
+		}
+		},[secondPart,id])
+  
 	const saveEditData = () => {
 		if (editedItemIndex !== -1) {
 			const updatedArr = [...arr];
@@ -223,6 +264,7 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 		setId(null);
 		setEditedItemIndex(-1);
 		setFirstPart(false);
+		setSecondPart(true)
 	};
 	console.log(arr);
 	const handlePositionChange = (e) => {
@@ -248,26 +290,43 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 		formState: { errors },
 	} = useForm({ resolver: yupResolver(addFormSchema) });
 	//update
+	const [editedItem,setEditedItem]=useState([])
 	const handleEditClick = (data) => {
 		console.log(data);
+		const editedItem = arr.find((item) => item.id === data.id);
 		setState({
-			company: data.company,
-			position: data.position,
-			labour: data.labour,
-			degree: data.degree,
-			dateStart: data.dateStart,
-			dateEnd: data.dateEnd,
+			company: editedItem.company,
+			position: editedItem.position,
+			labour: editedItem.labour,
+			degree: editedItem.degree,
+			dateStart: editedItem.dateStart,
+			dateEnd: editedItem.dateEnd,
 		});
 		setId(data.id);
 		const editedItemIndex = arr.findIndex((item) => item.id === data.id);
 		setEditedItemIndex(editedItemIndex);
 		setFirstPart(true);
+		setSecondPart(false)
+		setEditedItem(editedItem);
+		console.log(editedItem);
 	};
+	console.log(state);
 	console.log(id);
-	// const handleOpenAlert = (id) => {
-	// 	setAlert(true);
-	// 	setBody(true);
-	// };
+	useEffect(()=>{
+		console.log("edit");
+		setState(editedItem)
+		setState({
+			company: editedItem.company,
+					position: editedItem.position,
+					labour: editedItem.labour,
+					degree: editedItem.degree,
+					dateStart: editedItem.dateStart,
+					dateEnd: editedItem.dateEnd,
+		})
+		setClickedTextDegree(editedItem.degree); // Clear clickedTextDegree
+		  setClickedText(editedItem.labour); // Clear clickedText
+		},[editedItem])
+		
 	const handleDelete = (id) => {
 		const updatedArr = arr.filter((item) => item.id !== id);
 		setArr(updatedArr);
@@ -286,7 +345,10 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 		setFirstPart(true);
 		setLookList(true);
 		setSecondPart(false)
+		
+		
 	};
+	
 	const handleLookLists = () => {
 		setFirstPart(false);
 		setSecondPart(true)
@@ -389,6 +451,7 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 										value={state.company}
 										name="company"
 										onChange={(e) => handleChange(e)}
+										autocomplete="off"
 										style={{
 											borderColor: error.company ? 'red' : '',
 										  }}
@@ -401,6 +464,7 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 										value={state.position}
 										name="position"
 										onChange={(e) => handleChange(e)}
+										autocomplete="off"
 										style={{
 											borderColor: error.company ? 'red' : '',
 										  }}
@@ -518,7 +582,7 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 											<br />
 											<input
 												type="date"
-												id=""
+												id="start"
 												{...register("dateStart")}
 												value={state.dateStart}
 												name="dateStart"
@@ -548,7 +612,7 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 									</div>
 									<div className="working" onClick={() => handleDisable()}>
 										<h3>Hal hazırda çalışıram</h3>
-										<input type="checkbox" />
+										<input type="checkbox"/>
 									</div>
 									<div className="save">
 										{id === null ? (
@@ -595,8 +659,8 @@ const Form = ({alert,setAlert,handleOpenAlert}) => {
 													moment(item.dateStart).format("MM/YYYY")}
 												{item.dateEnd &&
 													"-" + moment(item.dateEnd).format("MM/YYYY")}
-												{!item.dateEnd && ""}
-												{inputDisabled && "-Currently working"}
+												{/* {item.dateEnd && ""} */}
+												{!item.dateEnd && "-Currently working"}
 											</div>
 											<div className="line"></div>
 											<i
